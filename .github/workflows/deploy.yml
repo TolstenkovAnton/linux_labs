@@ -55,7 +55,7 @@ jobs:
 
       - name: Build Podman image
         run: |
-          IMAGE=ghcr.io/${{ github.repository_owner }}/python-app:${{ github.sha }}
+          IMAGE=ghcr.io/${{ github.repository_owner | lower }}/python-app:${{ github.sha }}
           podman build -t $IMAGE .
           podman push $IMAGE
 
