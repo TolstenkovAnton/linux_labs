@@ -28,6 +28,8 @@ COPY --from=builder /app/src /app/src
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
 
+ENV PATH="/home/appuser/.local/bin:${PATH}"
+
 EXPOSE 8064
 
 CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8064"]
