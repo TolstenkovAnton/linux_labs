@@ -79,5 +79,5 @@ jobs:
 
             echo "===> Перезапускаем контейнер"
             podman rm -f python-app || true
-            podman run -d --name python-app --network=host -p 8064:8064 $IMAGE
+            podman run -d --name python-app --network host -p 8064:8064 $IMAGE
 
