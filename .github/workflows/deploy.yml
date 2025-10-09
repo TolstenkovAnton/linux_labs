@@ -42,6 +42,8 @@ jobs:
             echo "===> Логинимся в GHCR на сервере"
             podman login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GHCR_TOKEN }}
 
+            podman stop python-app || true
+
             echo "===> Перезапускаем контейнер"
             podman rm -f python-app || true
             podman run -d --name python-app --network host -p 8064:8064 $IMAGE
