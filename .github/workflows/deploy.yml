@@ -21,8 +21,8 @@ jobs:
       - name: Build Podman image
         run: |
           IMAGE=ghcr.io/vacdotcs/python-app:${{ github.sha }}
-          podman build -t $IMAGE .
-          podman push $IMAGE
+          docker build -t $IMAGE .
+          docker push $IMAGE
 
   deploy:
     runs-on: self-hosted
