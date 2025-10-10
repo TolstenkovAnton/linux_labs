@@ -11,7 +11,7 @@ COPY pyproject.toml ./
 
 ENV PIP_NO_CACHE_DIR=1
 
-# Устанавливаем только runtime зависимости
+# Только runtime deps
 RUN python -m pip install --no-cache-dir --upgrade pip && \
     python -m pip install --no-cache-dir .
 
@@ -48,6 +48,8 @@ RUN apt-get update && \
 COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 COPY --from=builder /app/src /app/src
+
+RUN find /usr/local/lib/python3.10/site-packages -name '__pycache__' -type d -exec rm -rf {} +
 
 RUN useradd -m -u 1000 appuser && \
     chown -R appuser:appuser /app

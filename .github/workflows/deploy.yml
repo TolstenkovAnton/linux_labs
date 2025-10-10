@@ -51,6 +51,7 @@ jobs:
             IMAGE_TEST=ghcr.io/vacdotcs/python-app:test-${{ github.sha }}
             podman login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GHCR_TOKEN }}
             podman run --rm --name python-app-test --network host $IMAGE_TEST python -m pytest -v tests
+            podman rmi $IMAGE_TEST || true
 
   deploy:
     runs-on: self-hosted
@@ -65,9 +66,19 @@ jobs:
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
             set -e
+            
             IMAGE_RUNTIME=ghcr.io/vacdotcs/python-app:runtime-${{ github.sha }}
+            
             podman login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GHCR_TOKEN }}
+            
             podman stop python-app || true
+            
             podman rm -f python-app || true
+            
             podman run --replace -d --name python-app --network host -p 8064:8064 $IMAGE_RUNTIME
+            
+            podman images --format "{{.Repository}}:{{.Tag}}" \
+            | grep 'python-app:runtime-' \
+            | grep -v "${{ github.sha }}" \
+            | xargs -r podman rmi -f || true
 
