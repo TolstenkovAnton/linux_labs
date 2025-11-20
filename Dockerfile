@@ -1,6 +1,8 @@
 # ---------- Stage 1: Builder ----------
 FROM python:3.10-slim AS builder
 
+RUN echo "Hey!"
+
 WORKDIR /app
 
 RUN apt-get update && \
@@ -60,4 +62,3 @@ ENV PATH="/home/appuser/.local/bin:${PATH}"
 EXPOSE 8064
 
 CMD ["python", "-m", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8064"]
-
