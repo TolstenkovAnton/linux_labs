@@ -47,7 +47,7 @@ jobs:
         shell: bash
 
   test:
-    runs-on: self-hosted
+    runs-on: Linux
     needs: build-and-push
     steps:
      # - name: Debug ssh connect to kubsu.tyvik.ru
@@ -75,7 +75,7 @@ jobs:
             podman rmi $IMAGE_TEST || true
 
   deploy:
-    runs-on: self-hosted
+    runs-on: Linux
     needs: [build-and-push, test]
     steps:
       - name: Deploy runtime image via SSH
