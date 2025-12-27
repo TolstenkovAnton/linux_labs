@@ -75,7 +75,7 @@ jobs:
           ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
       - name: Run remote commands
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} -p {{ secrets.SERVER_SSH_PORT }}  <<'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} -p 58529  <<'EOF'
           # Commands to run on the remote server
           OWNER_LC="${{ needs.build-and-push.outputs.owner_lc }}"
           IMAGE_TEST="ghcr.io/${OWNER_LC}/python-app:test-${{ github.sha }}"
