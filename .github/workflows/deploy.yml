@@ -62,6 +62,8 @@ jobs:
             OWNER_LC="${{ needs.build-and-push.outputs.owner_lc }}"
             IMAGE_TEST="ghcr.io/${OWNER_LC}/python-app:test-${{ github.sha }}"
 
+            echo "140.82.113.34 ghcr.io" | sudo tee -a /etc/hosts
+
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
              docker run --rm \
             --name python-app-test \
