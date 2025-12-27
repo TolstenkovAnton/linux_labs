@@ -51,10 +51,13 @@ jobs:
     needs: build-and-push
     steps:
       - name: Debug ssh connect to kubsu.tyvik.ru
-        run: |
-          ping kubsu.tyvik.ru
-          ping 212.192.134.135
-          telnet kubsu.tyvik.ru 58529
+        id: ping
+        run: ping kubsu.tyvik.ru -c 10
+
+      - name: Debug ssh connect to kubsu.tyvik.ru
+        id: telnet
+        run: telnet kubsu.tyvik.ru 58529
+
       - name: Runs tests via SSH
         uses: appleboy/ssh-action@v1.2.4
         with:
