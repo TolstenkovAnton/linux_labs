@@ -46,6 +46,28 @@ jobs:
           docker push "${IMAGE_BASE}:runtime-${{ github.sha }}"
         shell: bash
 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Save SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/key
+        chmod 600 ~/.ssh/key
+        echo "Key saved"
+    
+    - name: Test connection with different ports
+      run: |
+        for port in 22 2222 222; do
+          echo "Trying port $port..."
+          timeout 10 ssh -i ~/.ssh/key \
+            -p $port \
+            -o StrictHostKeyChecking=no \
+            -o ConnectTimeout=5 \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+            "echo 'Port $port works!'" && break || echo "Port $port failed"
+        done
+
   # test:
   #   runs-on: ubuntu-latest
   #   needs: build-and-push
