@@ -47,7 +47,7 @@ jobs:
         shell: bash
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-and-push
     steps:
       - name: Debug ssh connect to kubsu.tyvik.ru
