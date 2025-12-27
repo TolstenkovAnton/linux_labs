@@ -47,7 +47,7 @@ jobs:
         shell: bash
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-and-push
     steps:
       - name: Runs tests via SSH
@@ -62,16 +62,9 @@ jobs:
             OWNER_LC="${{ needs.build-and-push.outputs.owner_lc }}"
             IMAGE_TEST="ghcr.io/${OWNER_LC}/python-app:test-${{ github.sha }}"
 
-            echo "140.82.113.34 ghcr.io" | sudo tee -a /etc/hosts
-
-            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-             docker run --rm \
-            --name python-app-test \
-            --dns 8.8.8.8 \
-            --dns 1.1.1.1 \
-            $IMAGE_TEST \
-            python -m pytest -v tests
-            docker rmi $IMAGE_TEST || true
+            podman login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+            podman run --rm --name python-app-test --network host $IMAGE_TEST python -m pytest -v tests
+            podman rmi $IMAGE_TEST || true
 
   deploy:
     runs-on: self-hosted
