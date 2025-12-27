@@ -75,7 +75,7 @@ jobs:
             podman rmi $IMAGE_TEST || true
 
   deploy:
-    runs-on: ubuntu-slim
+    runs-on: self-hosted
     needs: [build-and-push, test]
     steps:
       - name: Deploy runtime image via SSH
