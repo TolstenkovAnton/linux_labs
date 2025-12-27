@@ -62,9 +62,9 @@ jobs:
             OWNER_LC="${{ needs.build-and-push.outputs.owner_lc }}"
             IMAGE_TEST="ghcr.io/${OWNER_LC}/python-app:test-${{ github.sha }}"
 
-            podman login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            podman run --rm --name python-app-test --network host $IMAGE_TEST python -m pytest -v tests
-            podman rmi $IMAGE_TEST || true
+            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+            docker run --rm --name python-app-test --network host $IMAGE_TEST python -m pytest -v tests
+            docker rmi $IMAGE_TEST || true
 
   deploy:
     runs-on: self-hosted
