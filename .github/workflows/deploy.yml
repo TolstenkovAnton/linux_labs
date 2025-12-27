@@ -63,7 +63,12 @@ jobs:
             IMAGE_TEST="ghcr.io/${OWNER_LC}/python-app:test-${{ github.sha }}"
 
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            docker run --rm --name python-app-test --network host $IMAGE_TEST python -m pytest -v tests
+             docker run --rm \
+            --name python-app-test \
+            --dns 8.8.8.8 \
+            --dns 1.1.1.1 \
+            $IMAGE_TEST \
+            python -m pytest -v tests
             docker rmi $IMAGE_TEST || true
 
   deploy:
